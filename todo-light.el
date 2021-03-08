@@ -1,7 +1,11 @@
 ;;; todo-light.el --- highlight TODO and similar keywords  -*- lexical-binding: t -*-
 ;;
-;; Copyright (c) 2019 Jade Michael Thornton
+;; Author: Jade Michael Thornton
+;; Copyright (c) 2019, 2021 Jade Michael Thornton
 ;; Copyright (C) 2013-2018 Jonas Bernoulli
+;; Package-Requires: ((emacs "24") (subr-x) (cl-lib))
+;; URL: https://gitlab.com/thornjad/todo-light
+;; Version: 1.1.0
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -15,7 +19,7 @@
 ;;
 ;; For a full copy of the GNU General Public License see
 ;; <http://www.gnu.org/licenses/>.
-;;
+
 ;;; Commentary:
 ;;
 ;; Highlight TODO and similar keywords in comments and strings.
@@ -31,8 +35,9 @@
 ;; to insert a keyword. If you want to use these commands, then you should bind
 ;; them in `todo-light-mode-map'
 ;;
-;; todo-light is forked from hl-todo by Jonas Bernoulli
-;;
+;; todo-light is forked from hl-todo by Jonas Bernoulli to make some needed
+;; improvements.
+
 ;;; Code:
 
 (eval-when-compile
@@ -45,17 +50,14 @@
 
 (defface todo-light
 	'((t (:bold t :foreground "#cc9393")))
-	"Base face used to highlight TODO and similar keywords. The faces used to
-highlight certain keywords are, by default, created by inheriting this face and
-using the appropriate color specified using the option
+	"Base face used to highlight TODO and similar keywords.
+The faces used to highlight certain keywords are, by default, created by
+inheriting this face and using the appropriate color specified using the option
 `todo-light-keyword-faces' as foreground color."
 	:group 'todo-light)
 
 (defcustom todo-light-activate-in-modes '(prog-mode text-mode)
-	"Major-modes in which `todo-light-mode' should be activated.
-
-This is used by `global-todo-light-mode', which activates `todo-light-mode' in
-all buffers whose major-mode derived from one of the modes listed here.
+	"Major-modes in which function `todo-light-mode' should be activated.
 
 Even though `org-mode' indirectly derives from `text-mode' this mode is never
 activated in `org-mode' buffers because that mode provides its own TODO keyword
@@ -67,7 +69,7 @@ handling."
 (defcustom todo-light-text-modes '(text-mode)
 	"Major-modes that are considered text-modes.
 
-In buffers whose major-mode derives from one of the modes listed here TODO
+In buffers whose major mode derives from one of the modes listed here TODO
 keywords are always highlighted even if they are not located inside a string."
 	:package-version '(todo-light . "2.1.0")
 	:group 'todo-light
