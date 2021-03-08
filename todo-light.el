@@ -36,7 +36,8 @@
 ;;; Code:
 
 (eval-when-compile
-	(require 'subr-x))
+	(require 'subr-x)
+  (require 'cl-lib))
 
 (defgroup todo-light nil
 	"Highlight TODO and similar keywords in comments and strings."
