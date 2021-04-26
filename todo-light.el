@@ -44,35 +44,35 @@
   (require 'cl-lib))
 
 (defgroup todo-light nil
-	"Highlight TODO and similar keywords in comments and strings."
-	:group 'font-lock-extra-types)
+  "Highlight TODO and similar keywords in comments and strings."
+  :group 'font-lock-extra-types)
 
 (defface todo-light
-	'((t (:bold t :foreground "#cc9393")))
-	"Base face used to highlight TODO and similar keywords.
+  '((t (:bold t :foreground "#cc9393")))
+  "Base face used to highlight TODO and similar keywords.
 The faces used to highlight certain keywords are, by default, created by
 inheriting this face and using the appropriate color specified using the option
 `todo-light-keyword-faces' as foreground color."
-	:group 'todo-light)
+  :group 'todo-light)
 
 (defcustom todo-light-activate-in-modes '(prog-mode text-mode)
-	"Major-modes in which function `todo-light-mode' should be activated.
+  "Major-modes in which function `todo-light-mode' should be activated.
 
 Even though `org-mode' indirectly derives from `text-mode' this mode is never
 activated in `org-mode' buffers because that mode provides its own TODO keyword
 handling."
-	:package-version '(todo-light . "2.1.0")
-	:group 'todo-light
-	:type '(repeat function))
+  :package-version '(todo-light . "2.1.0")
+  :group 'todo-light
+  :type '(repeat function))
 
 (defcustom todo-light-text-modes '(text-mode)
-	"Major-modes that are considered text-modes.
+  "Major-modes that are considered text-modes.
 
 In buffers whose major mode derives from one of the modes listed here TODO
 keywords are always highlighted even if they are not located inside a string."
-	:package-version '(todo-light . "2.1.0")
-	:group 'todo-light
-	:type '(repeat function))
+  :package-version '(todo-light . "2.1.0")
+  :group 'todo-light
+  :type '(repeat function))
 
 (defcustom todo-light-keyword-faces
   '(("TODO" . "#cc9393")
@@ -100,24 +100,24 @@ This package, like most of Emacs, does not use POSIX regexp backtracking. See
 info node `(elisp)POSIX Regexp' for why that matters. If you have two keywords
 \"TODO-NOW\" and \"TODO\", then they must be specified in that order.
 Alternatively you could use \"TODO\\(-NOW\\)?\"."
-	:package-version '(todo-light . "3.0.0")
-	:group 'todo-light
-	:type '(repeat (cons (string :tag "Keyword")
-											 (choice :tag "Face   "
-															 (string :tag "Color")
-															 (sexp :tag "Face")))))
+  :package-version '(todo-light . "3.0.0")
+  :group 'todo-light
+  :type '(repeat (cons (string :tag "Keyword")
+		       (choice :tag "Face   "
+			 (string :tag "Color")
+			 (sexp :tag "Face")))))
 
 (defcustom todo-light-highlight-punctuation ""
-	"String of characters to highlight after keywords.
+  "String of characters to highlight after keywords.
 
 Each of the characters appearing in this string is highlighted using the same
 face as the preceeding keyword when it directly follows the keyword.
 
 Characters whose syntax class is `w' (which means word), including alphanumeric
 characters, cannot be used here."
-	:package-version '(todo-light . "2.0.0")
-	:group 'todo-light
-	:type 'string)
+  :package-version '(todo-light . "2.0.0")
+  :group 'todo-light
+  :type 'string)
 
 (defvar-local todo-light--regexp nil)
 (defvar-local todo-light--keywords nil)
@@ -143,74 +143,74 @@ characters, cannot be used here."
   (font-lock-add-keywords nil todo-light--keywords t))
 
 (defvar todo-light--syntax-table
-	(let ((table (copy-syntax-table text-mode-syntax-table)))
-		(modify-syntax-entry ?? "w" table)
-		table))
+  (let ((table (copy-syntax-table text-mode-syntax-table)))
+    (modify-syntax-entry ?? "w" table)
+    table))
 
 (defun todo-light--search (&optional regexp bound backward)
-	(unless regexp
-		(setq regexp todo-light--regexp))
-	(cl-block nil
-		(while (let ((case-fold-search nil))
-						 (with-syntax-table todo-light--syntax-table
-							 (funcall (if backward #'re-search-backward #'re-search-forward)
-												regexp bound t)))
-			(cond ((or (apply #'derived-mode-p todo-light-text-modes)
-								 (todo-light--inside-comment-or-string-p))
-						 (cl-return t))
-						((and bound (funcall (if backward #'<= #'>=) (point) bound))
-						 (cl-return nil))))))
+  (unless regexp
+    (setq regexp todo-light--regexp))
+  (cl-block nil
+    (while (let ((case-fold-search nil))
+	     (with-syntax-table todo-light--syntax-table
+	       (funcall (if backward #'re-search-backward #'re-search-forward)
+			regexp bound t)))
+      (cond ((or (apply #'derived-mode-p todo-light-text-modes)
+		 (todo-light--inside-comment-or-string-p))
+	     (cl-return t))
+	    ((and bound (funcall (if backward #'<= #'>=) (point) bound))
+	     (cl-return nil))))))
 
 (defun todo-light--inside-comment-or-string-p ()
-	(nth 8 (syntax-ppss)))
+  (nth 8 (syntax-ppss)))
 
 (defun todo-light--get-face ()
-	(let* ((keyword (match-string 2))
-				 (face (cdr (cl-find-if (lambda (elt)
-																	(string-match-p (format "\\`%s\\'" (car elt))
-																									keyword))
-																todo-light-keyword-faces))))
-		(if (stringp face)
-				(list :inherit 'todo-light :foreground face)
-			face)))
+  (let* ((keyword (match-string 2))
+	 (face (cdr (cl-find-if (lambda (elt)
+				  (string-match-p (format "\\`%s\\'" (car elt))
+						  keyword))
+				todo-light-keyword-faces))))
+    (if (stringp face)
+	(list :inherit 'todo-light :foreground face)
+      face)))
 
 (defvar todo-light-mode-map (make-sparse-keymap)
-	"Keymap for `todo-light-mode'.")
+  "Keymap for `todo-light-mode'.")
 
 ;;;###autoload
 (define-minor-mode todo-light-mode
-	"Highlight TODO and similar keywords in comments and strings."
-	:lighter ""
-	:keymap todo-light-mode-map
-	:group 'todo-light
-	(if todo-light-mode
-			(todo-light--setup)
-		(font-lock-remove-keywords nil todo-light--keywords))
-	(when font-lock-mode
-		(save-excursion
-			(goto-char (point-min))
-			(while (todo-light--search)
-				(save-excursion
-		(font-lock-fontify-region (match-beginning 0) (match-end 0) nil))))))
+  "Highlight TODO and similar keywords in comments and strings."
+  :lighter ""
+  :keymap todo-light-mode-map
+  :group 'todo-light
+  (if todo-light-mode
+      (todo-light--setup)
+    (font-lock-remove-keywords nil todo-light--keywords))
+  (when font-lock-mode
+    (save-excursion
+      (goto-char (point-min))
+      (while (todo-light--search)
+	(save-excursion
+	  (font-lock-fontify-region (match-beginning 0) (match-end 0) nil))))))
 
 (defun todo-light--turn-on-mode-if-desired ()
-	(when (and (apply #'derived-mode-p todo-light-activate-in-modes)
-						 (not (derived-mode-p 'org-mode)))
-		(todo-light-mode 1)))
+  (when (and (apply #'derived-mode-p todo-light-activate-in-modes)
+	     (not (derived-mode-p 'org-mode)))
+    (todo-light-mode 1)))
 
 ;;;###autoload
 (define-globalized-minor-mode global-todo-light-mode
-	todo-light-mode todo-light--turn-on-mode-if-desired)
+  todo-light-mode todo-light--turn-on-mode-if-desired)
 
 ;;;###autoload
 (defun todo-light-occur ()
-	"Use `occur' to find all TODO or similar keywords. This actually finds a
+  "Use `occur' to find all TODO or similar keywords. This actually finds a
 superset of the highlighted keywords, because it uses a regexp instead of a more
 sophisticated matcher. It also finds occurrences that are not within a string or
 comment."
-	(interactive)
-	(with-syntax-table todo-light--syntax-table
-		(occur todo-light--regexp)))
+  (interactive)
+  (with-syntax-table todo-light--syntax-table
+    (occur todo-light--regexp)))
 
 (provide 'todo-light)
 ;;; todo-light.el ends here
