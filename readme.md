@@ -1,7 +1,7 @@
 # todo-light - highlight TODO and similar keywords
 
 _Author:_ Jade Michael Thornton<br>
-_Version:_ 1.1.0<br>
+_Version:_ 1.2.0<br>
 
 Highlight TODO and similar keywords in comments and strings.
 

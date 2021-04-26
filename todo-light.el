@@ -5,7 +5,7 @@
 ;; Copyright (C) 2013-2018 Jonas Bernoulli
 ;; Package-Requires: ((emacs "24") (cl-lib))
 ;; URL: https://gitlab.com/thornjad/todo-light
-;; Version: 1.1.0
+;; Version: 1.2.0
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
