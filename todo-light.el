@@ -75,17 +75,18 @@ keywords are always highlighted even if they are not located inside a string."
 	:type '(repeat function))
 
 (defcustom todo-light-keyword-faces
-	'(("TODO" . "#cc9393")
-		("NEXT" . "#dca3a3")
-		("DONT" . "#5f7f5f")
-		("FAIL" . "#8c5353")
-		("DONE" . "#afd8af")
-		("NOTE"   . "#d0bf8f")
-		("KLUDGE" . "#d0bf8f")
-		("HACK"   . "#d0bf8f")
-		("TEMP"   . "#d0bf8f")
-		("FIXME"  . "#cc9393"))
-	"Faces used to highlight specific TODO keywords.
+  '(("TODO" . "#cc9393")
+    ("NEXT" . "#dca3a3")
+    ("DONT" . "#5f7f5f")
+    ("FAIL" . "#8c5353")
+    ("DONE" . "#afd8af")
+    ("NOTE" . "#d0bf8f")
+    ("ASSUMPTION" . "#d0bf8f")
+    ("KLUDGE" . "#d0bf8f")
+    ("HACK" . "#d0bf8f")
+    ("TEMP" . "#d0bf8f")
+    ("FIXME" . "#cc9393"))
+  "Faces used to highlight specific TODO keywords.
 
 Each entry has the form (KEYWORD . COLOR). KEYWORD is used as part of a regular
 expression. If (regexp-quote KEYWORD) is not equal to KEYWORD, then it is
