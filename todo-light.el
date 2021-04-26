@@ -3,7 +3,7 @@
 ;; Author: Jade Michael Thornton
 ;; Copyright (c) 2019, 2021 Jade Michael Thornton
 ;; Copyright (C) 2013-2018 Jonas Bernoulli
-;; Package-Requires: ((emacs "24") (subr-x) (cl-lib))
+;; Package-Requires: ((emacs "24") (cl-lib))
 ;; URL: https://gitlab.com/thornjad/todo-light
 ;; Version: 1.1.0
 ;;
@@ -41,7 +41,6 @@
 ;;; Code:
 
 (eval-when-compile
-	(require 'subr-x)
   (require 'cl-lib))
 
 (defgroup todo-light nil
@@ -123,23 +122,24 @@ characters, cannot be used here."
 (defvar-local todo-light--keywords nil)
 
 (defun todo-light--setup ()
-	(when-let ((bomb (assoc "???" todo-light-keyword-faces)))
-		;; If the user customized this variable before we started to
-		;; treat the strings as regexps, then the string "???" might
-		;; still be present.  We have to remove it because it results
-		;; in the regexp search taking forever.
-		(setq todo-light-keyword-faces (delete bomb todo-light-keyword-faces)))
-	(setq todo-light--regexp
-				(concat "\\(\\<"
-								"\\(" (mapconcat #'car todo-light-keyword-faces "\\|") "\\)"
-								"\\(?:\\>\\|\\>\\?\\)"
-								(and (not (equal todo-light-highlight-punctuation ""))
-										 (concat "[" todo-light-highlight-punctuation "]*"))
-								"\\)"))
-	(setq todo-light--keywords
-				`(((lambda (bound) (todo-light--search nil bound))
-					 (1 (todo-light--get-face) t t))))
-	(font-lock-add-keywords nil todo-light--keywords t))
+  (let ((bomb (assoc "???" todo-light-keyword-faces)))
+    (when bomb
+      ;; If the user customized this variable before we started to
+      ;; treat the strings as regexps, then the string "???" might
+      ;; still be present.  We have to remove it because it results
+      ;; in the regexp search taking forever.
+      (setq todo-light-keyword-faces (delete bomb todo-light-keyword-faces))))
+  (setq todo-light--regexp
+	(concat "\\(\\<"
+		"\\(" (mapconcat #'car todo-light-keyword-faces "\\|") "\\)"
+		"\\(?:\\>\\|\\>\\?\\)"
+		(and (not (equal todo-light-highlight-punctuation ""))
+		     (concat "[" todo-light-highlight-punctuation "]*"))
+		"\\)"))
+  (setq todo-light--keywords
+	`(((lambda (bound) (todo-light--search nil bound))
+	   (1 (todo-light--get-face) t t))))
+  (font-lock-add-keywords nil todo-light--keywords t))
 
 (defvar todo-light--syntax-table
 	(let ((table (copy-syntax-table text-mode-syntax-table)))
