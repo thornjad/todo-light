@@ -203,15 +203,17 @@ characters, cannot be used here."
 (define-globalized-minor-mode global-todo-light-mode
   todo-light-mode todo-light--turn-on-mode-if-desired)
 
-;;;###autoload
 (defun todo-light-occur ()
-  "Use `occur' to find all TODO or similar keywords. This actually finds a
-superset of the highlighted keywords, because it uses a regexp instead of a more
-sophisticated matcher. It also finds occurrences that are not within a string or
-comment."
+  "Use `occur' to find all TODO or similar keywords.
+
+This actually finds a superset of the highlighted keywords, because it uses a regexp instead of a
+more sophisticated matcher. It also finds occurrences that are not within a string or comment.
+
+This function was made obsolete in version 1.3.0, and will be removed from future versions."
   (interactive)
   (with-syntax-table todo-light--syntax-table
     (occur todo-light--regexp)))
+(make-obsolete #'todo-light-occur nil "v1.3.0")
 
 (provide 'todo-light)
 ;;; todo-light.el ends here
