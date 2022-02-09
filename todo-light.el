@@ -3,7 +3,7 @@
 ;; Author: Jade Michael Thornton
 ;; Copyright (c) 2019-2022 Jade Michael Thornton
 ;; Copyright (C) 2013-2018 Jonas Bernoulli
-;; Package-Requires: ((emacs "24") (cl-lib))
+;; Package-Requires: ((emacs "24.3"))
 ;; URL: https://gitlab.com/thornjad/todo-light
 ;; Version: 1.2.1
 ;;
