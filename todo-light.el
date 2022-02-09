@@ -1,4 +1,4 @@
-;;; todo-light.el --- highlight TODO and similar keywords  -*- lexical-binding: t -*-
+;;; todo-light.el --- Highlight TODO and similar keywords  -*- lexical-binding: t -*-
 ;;
 ;; Author: Jade Michael Thornton
 ;; Copyright (c) 2019-2022 Jade Michael Thornton
@@ -50,6 +50,7 @@
 (defface todo-light
   '((t (:bold t :foreground "#cc9393")))
   "Base face used to highlight TODO and similar keywords.
+
 The faces used to highlight certain keywords are, by default, created by
 inheriting this face and using the appropriate color specified using the option
 `todo-light-keyword-faces' as foreground color."
@@ -124,6 +125,7 @@ characters, cannot be used here."
 (defvar-local todo-light--keywords nil)
 
 (defun todo-light--setup ()
+  "Set up keywords, faces, etc."
   (let ((bomb (assoc "???" todo-light-keyword-faces)))
     (when bomb
       ;; If the user customized this variable before we started to
@@ -149,6 +151,7 @@ characters, cannot be used here."
     table))
 
 (defun todo-light--search (&optional regexp bound backward)
+  "Search for keywords matching REGEXP within BOUND and BACKWARD."
   (unless regexp
     (setq regexp todo-light--regexp))
   (cl-block nil
@@ -163,9 +166,11 @@ characters, cannot be used here."
 	           (cl-return nil))))))
 
 (defun todo-light--inside-comment-or-string-p ()
+  "Return true if we're inside a comment or string."
   (nth 8 (syntax-ppss)))
 
 (defun todo-light--get-face ()
+  "Return the face for the keyword at point."
   (let* ((keyword (match-string 2))
 	       (face (cdr (cl-find-if (lambda (elt)
 				                          (string-match-p (format "\\`%s\\'" (car elt))
@@ -195,6 +200,7 @@ characters, cannot be used here."
 	        (font-lock-fontify-region (match-beginning 0) (match-end 0) nil))))))
 
 (defun todo-light--turn-on-mode-if-desired ()
+  "Helper for minor mode."
   (when (and (apply #'derived-mode-p todo-light-activate-in-modes)
 	           (not (derived-mode-p 'org-mode)))
     (todo-light-mode 1)))
@@ -206,10 +212,12 @@ characters, cannot be used here."
 (defun todo-light-occur ()
   "Use `occur' to find all TODO or similar keywords.
 
-This actually finds a superset of the highlighted keywords, because it uses a regexp instead of a
-more sophisticated matcher. It also finds occurrences that are not within a string or comment.
+This actually finds a superset of the highlighted keywords, because it uses a
+regexp instead of a more sophisticated matcher. It also finds occurrences that
+are not within a string or comment.
 
-This function was made obsolete in version 1.3.0, and will be removed from future versions."
+This function was made obsolete in version 1.3.0, and will be removed from
+future versions."
   (interactive)
   (with-syntax-table todo-light--syntax-table
     (occur todo-light--regexp)))
