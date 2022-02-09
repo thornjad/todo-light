@@ -104,9 +104,9 @@ Alternatively you could use \"TODO\\(-NOW\\)?\"."
   :package-version '(todo-light . "3.0.0")
   :group 'todo-light
   :type '(repeat (cons (string :tag "Keyword")
-		       (choice :tag "Face   "
-			 (string :tag "Color")
-			 (sexp :tag "Face")))))
+		                   (choice :tag "Face   "
+			                   (string :tag "Color")
+			                   (sexp :tag "Face")))))
 
 (defcustom todo-light-highlight-punctuation ""
   "String of characters to highlight after keywords.
@@ -132,15 +132,15 @@ characters, cannot be used here."
       ;; in the regexp search taking forever.
       (setq todo-light-keyword-faces (delete bomb todo-light-keyword-faces))))
   (setq todo-light--regexp
-	(concat "\\(\\<"
-		"\\(" (mapconcat #'car todo-light-keyword-faces "\\|") "\\)"
-		"\\(?:\\>\\|\\>\\?\\)"
-		(and (not (equal todo-light-highlight-punctuation ""))
-		     (concat "[" todo-light-highlight-punctuation "]*"))
-		"\\)"))
+	      (concat "\\(\\<"
+		            "\\(" (mapconcat #'car todo-light-keyword-faces "\\|") "\\)"
+		            "\\(?:\\>\\|\\>\\?\\)"
+		            (and (not (equal todo-light-highlight-punctuation ""))
+		                 (concat "[" todo-light-highlight-punctuation "]*"))
+		            "\\)"))
   (setq todo-light--keywords
-	`(((lambda (bound) (todo-light--search nil bound))
-	   (1 (todo-light--get-face) t t))))
+	      `(((lambda (bound) (todo-light--search nil bound))
+	         (1 (todo-light--get-face) t t))))
   (font-lock-add-keywords nil todo-light--keywords t))
 
 (defvar todo-light--syntax-table
@@ -153,26 +153,26 @@ characters, cannot be used here."
     (setq regexp todo-light--regexp))
   (cl-block nil
     (while (let ((case-fold-search nil))
-	     (with-syntax-table todo-light--syntax-table
-	       (funcall (if backward #'re-search-backward #'re-search-forward)
-			regexp bound t)))
+	           (with-syntax-table todo-light--syntax-table
+	             (funcall (if backward #'re-search-backward #'re-search-forward)
+			                  regexp bound t)))
       (cond ((or (apply #'derived-mode-p todo-light-text-modes)
-		 (todo-light--inside-comment-or-string-p))
-	     (cl-return t))
-	    ((and bound (funcall (if backward #'<= #'>=) (point) bound))
-	     (cl-return nil))))))
+		             (todo-light--inside-comment-or-string-p))
+	           (cl-return t))
+	          ((and bound (funcall (if backward #'<= #'>=) (point) bound))
+	           (cl-return nil))))))
 
 (defun todo-light--inside-comment-or-string-p ()
   (nth 8 (syntax-ppss)))
 
 (defun todo-light--get-face ()
   (let* ((keyword (match-string 2))
-	 (face (cdr (cl-find-if (lambda (elt)
-				  (string-match-p (format "\\`%s\\'" (car elt))
-						  keyword))
-				todo-light-keyword-faces))))
+	       (face (cdr (cl-find-if (lambda (elt)
+				                          (string-match-p (format "\\`%s\\'" (car elt))
+						                                      keyword))
+				                        todo-light-keyword-faces))))
     (if (stringp face)
-	(list :inherit 'todo-light :foreground face)
+	      (list :inherit 'todo-light :foreground face)
       face)))
 
 (defvar todo-light-mode-map (make-sparse-keymap)
@@ -191,12 +191,12 @@ characters, cannot be used here."
     (save-excursion
       (goto-char (point-min))
       (while (todo-light--search)
-	(save-excursion
-	  (font-lock-fontify-region (match-beginning 0) (match-end 0) nil))))))
+	      (save-excursion
+	        (font-lock-fontify-region (match-beginning 0) (match-end 0) nil))))))
 
 (defun todo-light--turn-on-mode-if-desired ()
   (when (and (apply #'derived-mode-p todo-light-activate-in-modes)
-	     (not (derived-mode-p 'org-mode)))
+	           (not (derived-mode-p 'org-mode)))
     (todo-light-mode 1)))
 
 ;;;###autoload
