@@ -1,7 +1,7 @@
 ;;; todo-light.el --- highlight TODO and similar keywords  -*- lexical-binding: t -*-
 ;;
 ;; Author: Jade Michael Thornton
-;; Copyright (c) 2019, 2021 Jade Michael Thornton
+;; Copyright (c) 2019-2022 Jade Michael Thornton
 ;; Copyright (C) 2013-2018 Jonas Bernoulli
 ;; Package-Requires: ((emacs "24") (cl-lib))
 ;; URL: https://gitlab.com/thornjad/todo-light
@@ -22,7 +22,7 @@
 
 ;;; Commentary:
 ;;
-;; Highlight TODO and similar keywords in comments and strings.
+;; Highlights TODO and similar keywords in comments and strings.
 ;;
 ;; You can either turn on `todo-light-mode' in individual buffers or use the the
 ;; global variant `global-todo-light-mode'. Note that the option
@@ -85,6 +85,7 @@ keywords are always highlighted even if they are not located inside a string."
     ("KLUDGE" . "#d0bf8f")
     ("HACK" . "#d0bf8f")
     ("TEMP" . "#d0bf8f")
+    ("DEBUG" . "#d0bf8f")
     ("FIXME" . "#cc9393"))
   "Faces used to highlight specific TODO keywords.
 
