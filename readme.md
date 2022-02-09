@@ -1,9 +1,9 @@
 # todo-light - highlight TODO and similar keywords
 
 _Author:_ Jade Michael Thornton<br>
-_Version:_ 1.2.0<br>
+_Version:_ 1.2.1<br>
 
-Highlight TODO and similar keywords in comments and strings.
+Highlights TODO and similar keywords in comments and strings.
 
 You can either turn on `todo-light-mode` in individual buffers or use the the
 global variant `global-todo-light-mode`. Note that the option
