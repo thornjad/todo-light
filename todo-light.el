@@ -78,6 +78,7 @@ keywords are always highlighted even if they are not located inside a string."
 (defcustom todo-light-keyword-faces
   '(("TODO" . "#cc9393")
     ("NEXT" . "#dca3a3")
+    ("REVIEW" . "#dca3a3")
     ("DONT" . "#5f7f5f")
     ("NOTE" . "#5f7f5f")
     ("FAIL" . "#8c5353")
